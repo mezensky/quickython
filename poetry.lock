@@ -362,14 +362,14 @@ files = [
 
 [[package]]
 name = "commitizen"
-version = "4.13.5"
+version = "4.13.7"
 description = "Python commitizen client tool"
 optional = false
 python-versions = "<4.0,>=3.10"
 groups = ["dev"]
 files = [
-    {file = "commitizen-4.13.5-py3-none-any.whl", hash = "sha256:d78acc308e1f39f748410746bb2278213c16b6522b898bf3b48f1588dc5f0728"},
-    {file = "commitizen-4.13.5.tar.gz", hash = "sha256:c7e394d5ba716aea544bdb791a585b42a2a0ee30f0ac50edfc88bef59d494fc8"},
+    {file = "commitizen-4.13.7-py3-none-any.whl", hash = "sha256:7e179fa2a29626d330e38332e3f306caa3f11ac1cc0bc139f61dff167f224434"},
+    {file = "commitizen-4.13.7.tar.gz", hash = "sha256:61b1872a3b5b9da69f1819a4e238249071a636ef422cf6f3735c491eb77e9526"},
 ]
 
 [package.dependencies]
@@ -2308,4 +2308,4 @@ dev = ["pytest", "setuptools"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.14"
-content-hash = "22aa8b9d6c5c2e084a67228331c50165c728d88777d95f088d153e7ba55e71f3"
+content-hash = "eddf8c0599c2a565eb51920559a00f03219a7a5a4ea86df5ce27664c1cb05359"
