@@ -10,7 +10,7 @@ packages = [{include = "quickython", from = "src"}]
 python = "^3.14"
 
 [tool.poetry.group.dev.dependencies]
-mypy = "^1.19.1"
+mypy = "^1.20.1"
 ruff = "^0.9.5"
 pytest = "^9.0.2"
 pytest-cov = "^6.0.0"
