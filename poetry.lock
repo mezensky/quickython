@@ -362,14 +362,14 @@ files = [
 
 [[package]]
 name = "commitizen"
-version = "4.13.5"
+version = "4.15.0"
 description = "Python commitizen client tool"
 optional = false
 python-versions = "<4.0,>=3.10"
 groups = ["dev"]
 files = [
-    {file = "commitizen-4.13.5-py3-none-any.whl", hash = "sha256:d78acc308e1f39f748410746bb2278213c16b6522b898bf3b48f1588dc5f0728"},
-    {file = "commitizen-4.13.5.tar.gz", hash = "sha256:c7e394d5ba716aea544bdb791a585b42a2a0ee30f0ac50edfc88bef59d494fc8"},
+    {file = "commitizen-4.15.0-py3-none-any.whl", hash = "sha256:01803238c1d5f3ea9ff9de5f994984860ee38d496dae8cdc15772f046f55cb3d"},
+    {file = "commitizen-4.15.0.tar.gz", hash = "sha256:80e6df74fd2ccbfa175273cfb53ca361178ae70be5314017e84359e24d172d5f"},
 ]
 
 [package.dependencies]
@@ -379,7 +379,7 @@ colorama = ">=0.4.1,<1.0"
 decli = ">=0.6.0,<1.0"
 deprecated = ">=1.2.13,<2"
 jinja2 = ">=2.10.3"
-packaging = ">=19"
+packaging = ">=26"
 prompt-toolkit = "!=3.0.52"
 pyyaml = ">=3.8"
 questionary = ">=2.0,<3.0"
