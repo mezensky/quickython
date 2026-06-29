@@ -1,54 +1,36 @@
-"""Example of property-based testing with Hypothesis.
+"""Property-based tests for the example module using Hypothesis.
 
-This demonstrates how to use Hypothesis for automated test generation.
-Uncomment and adapt these tests for your actual use cases.
+These demonstrate asserting *properties* that hold for all inputs, instead of
+hand-picked cases. Adapt the strategies and properties to your own code.
 """
 
+import pytest
 from hypothesis import given
 from hypothesis import strategies as st
 
+from quickython.example import Greeting, greet
 
-# Example 1: Test that reversing a string twice gives the original
-@given(st.text())
-def test_reverse_twice_is_identity(text: str) -> None:
-    """Reversing a string twice should return the original string.
-
-    Args:
-        text: A randomly generated string from Hypothesis.
-    """
-    reversed_once = text[::-1]
-    reversed_twice = reversed_once[::-1]
-    assert reversed_twice == text
+# Text that is still non-empty after stripping (greet rejects blank names).
+nonblank_text = st.text(min_size=1).filter(lambda s: s.strip())
 
 
-# Example 2: Test mathematical property
-@given(st.integers(), st.integers())
-def test_addition_is_commutative(a: int, b: int) -> None:
-    """Addition should be commutative: a + b = b + a.
-
-    Args:
-        a: A randomly generated integer.
-        b: Another randomly generated integer.
-    """
-    assert a + b == b + a
+@given(recipient=st.text(), salutation=st.text())
+def test_greeting_render_matches_format(recipient: str, salutation: str) -> None:
+    """Greeting.render() formats as 'salutation, recipient!' for any text."""
+    greeting = Greeting(recipient=recipient, salutation=salutation)
+    assert greeting.render() == f"{salutation}, {recipient}!"
 
 
-# Example 3: Test with constrained inputs
-@given(st.lists(st.integers(), min_size=1, max_size=100))
-def test_sorted_list_properties(numbers: list[int]) -> None:
-    """Test properties of sorted lists.
+@given(name=nonblank_text, salutation=st.text())
+def test_greet_embeds_stripped_name(name: str, salutation: str) -> None:
+    """greet() applies the salutation and the whitespace-stripped name."""
+    result = greet(name, salutation=salutation)
+    assert result == f"{salutation}, {name.strip()}!"
+    assert name.strip() in result
 
-    Args:
-        numbers: A randomly generated list of integers.
-    """
-    sorted_numbers = sorted(numbers)
 
-    # Property 1: Sorted list has same length
-    assert len(sorted_numbers) == len(numbers)
-
-    # Property 2: All elements are still present
-    assert set(sorted_numbers) == set(numbers)
-
-    # Property 3: Elements are in non-decreasing order
-    for i in range(len(sorted_numbers) - 1):
-        assert sorted_numbers[i] <= sorted_numbers[i + 1]
+@given(blank=st.text(alphabet=" \t\n\r\f\v"))
+def test_greet_rejects_blank_names(blank: str) -> None:
+    """greet() raises ValueError for any empty or whitespace-only name."""
+    with pytest.raises(ValueError, match="must not be empty"):
+        greet(blank)
