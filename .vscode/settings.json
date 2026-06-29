@@ -9,9 +9,6 @@
     "tests"
   ],
 
-  // Linting - Using ruff via CLI
-  "python.linting.enabled": false,
-
   // Formatting
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
@@ -29,7 +26,7 @@
   },
 
   // Type checking
-  "python.analysis.typeCheckingMode": "basic",
+  "python.analysis.typeCheckingMode": "off",
 
   // Hide build artifacts and caches
   "files.exclude": {
