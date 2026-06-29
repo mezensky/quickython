@@ -1,7 +1,6 @@
 version: 2
 updates:
-  # Python dependencies via pip (Poetry uses pyproject.toml)
-  - package-ecosystem: "pip"
+  - package-ecosystem: "uv"
     directory: "/"
     schedule:
       interval: "weekly"
@@ -14,16 +13,21 @@ updates:
     commit-message:
       prefix: "deps"
       include: "scope"
+    groups:
+      dev-dependencies:
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
 
-  # GitHub Actions dependencies
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
       day: "monday"
-      time: "09:00"
     labels:
       - "dependencies"
       - "github-actions"
     commit-message:
       prefix: "ci"
+    groups:
+      actions:
+        patterns: ["*"]
