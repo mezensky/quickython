@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed (2026-06-29) - Migrated to the uv Toolchain
+
+#### Tooling
+- Migrated from Poetry to **uv** with PEP 621 metadata and the **hatchling**
+  build backend; `uv.lock` replaces `poetry.lock`.
+- Enabled **mypy strict** mode and shipped a `py.typed` marker (PEP 561).
+- Replaced the Makefile with a **nox** task runner.
+- Rebuilt CI on uv (Python 3.12-3.14); releases now use **PyPI Trusted
+  Publishing** (OIDC) instead of twine + tokens.
+- `__version__` is now single-sourced from package metadata.
+
+#### Added
+- Idiomatic samples: a typed frozen dataclass, a `greet()` function, and an
+  `argparse` CLI entry point, with parametrize/fixture/mock test examples.
+- `CONTRIBUTING.md`, `SECURITY.md`, and a pull-request template.
+
+#### Removed
+- Poetry, twine, and the build-history meta-docs
+  (`BEST_PRACTICES_ANALYSIS.md`, `IMPLEMENTATION_SUMMARY.md`).
+
 ### Added (2026-02-06) - Comprehensive Best Practices Implementation
 
 #### Security Enhancements
