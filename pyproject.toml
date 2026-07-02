@@ -1,50 +1,61 @@
-[tool.poetry]
+[project]
 name = "quickython"
 version = "0.1.0"
 description = "Python quick start project template"
-authors = ["Peter Mezensky <peter.mezensky@kroger.com>"]
 readme = "README.md"
-packages = [{include = "quickython", from = "src"}]
+requires-python = ">=3.12"
+license = "MIT"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+keywords = ["template", "quickstart", "boilerplate"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Typing :: Typed",
+]
+dependencies = []
 
-[tool.poetry.dependencies]
-python = "^3.14"
+[project.urls]
+Homepage = "https://github.com/your-org/quickython"
+Repository = "https://github.com/your-org/quickython"
+Changelog = "https://github.com/your-org/quickython/blob/main/CHANGELOG.md"
 
-[tool.poetry.group.dev.dependencies]
-mypy = "^1.19.1"
-ruff = "^0.9.5"
-pytest = "^9.0.2"
-pytest-cov = "^6.0.0"
-pytest-xdist = "^3.6.1"
-pytest-timeout = "^2.3.1"
-pytest-mock = "^3.15.0"
-hypothesis = "^6.135.0"
-interrogate = "^1.7.0"
-vulture = "^2.14"
-build = "^1.2.2"
-twine = "^6.0.1"
-pre-commit = "^4.0.1"
-pip-audit = "^2.7.3"
-commitizen = "^4.4.0"
+[project.scripts]
+quickython = "quickython.__main__:main"
 
 [build-system]
-requires = ["poetry-core>=2.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling>=1.22"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/quickython"]
+
+[dependency-groups]
+dev = [
+    "ruff",
+    "mypy",
+    "pytest",
+    "pytest-cov",
+    "pytest-xdist",
+    "pytest-timeout",
+    "pytest-mock",
+    "hypothesis",
+    "interrogate",
+    "vulture",
+    "pip-audit",
+    "commitizen",
+    "pre-commit",
+    "nox",
+]
 
 [tool.ruff]
 line-length = 88
-target-version = "py313"
-exclude = [
-    ".git",
-    ".mypy_cache",
-    ".pytest_cache",
-    ".ruff_cache",
-    "__pycache__",
-    "build",
-    "dist",
-]
+target-version = "py312"
 
 [tool.ruff.lint]
-# Enable comprehensive rule sets
 select = [
     "E",   # pycodestyle errors
     "W",   # pycodestyle warnings
@@ -67,18 +78,20 @@ select = [
     "TID", # flake8-tidy-imports
     "RUF", # Ruff-specific rules
 ]
-# Ignore rules that are too strict for quick-start template or conflict with formatter
 ignore = [
-    "S101",  # Use of assert detected (common in tests)
-    "D100",  # Missing docstring in public module
-    "D104",  # Missing docstring in public package
-    "D203",  # 1 blank line required before class docstring (conflicts with D211)
-    "D213",  # Multi-line docstring summary should start at the second line (conflicts with D212)
+    "S101",    # Use of assert detected (common in tests)
+    "D100",    # Missing docstring in public module
+    "D104",    # Missing docstring in public package
+    "D203",    # 1 blank line before class docstring (conflicts with D211)
+    "D213",    # Multi-line docstring summary on second line (conflicts with D212)
     "PLR0913", # Too many arguments to function call
 ]
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["PLR2004", "B010"] # magic-value comparisons and setattr calls are fine in tests
 
 [tool.ruff.format]
 quote-style = "double"
@@ -87,19 +100,10 @@ skip-magic-trailing-comma = false
 line-ending = "auto"
 
 [tool.mypy]
-python_version = "3.14"
-warn_return_any = true
-warn_unused_configs = true
-disallow_untyped_defs = false
-disallow_incomplete_defs = false
-check_untyped_defs = true
-disallow_untyped_decorators = false
-no_implicit_optional = true
-warn_redundant_casts = true
-warn_unused_ignores = true
-warn_no_return = true
-strict_equality = true
+python_version = "3.12"
+strict = true
 files = ["src", "tests"]
+warn_unused_configs = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -107,12 +111,11 @@ python_files = ["test_*.py", "*_test.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
 addopts = [
-    "-v",
+    "-ra",
     "--strict-markers",
     "--strict-config",
     "--cov=quickython",
     "--cov-report=term-missing",
-    "--cov-report=html",
     "--cov-branch",
     "--timeout=60",
 ]
@@ -120,10 +123,20 @@ addopts = [
 [tool.coverage.run]
 source = ["src"]
 branch = true
-omit = [
-    "*/tests/*",
-    "*/__pycache__/*",
-    "*/.venv/*",
+omit = ["*/__pycache__/*"]
+
+[tool.coverage.report]
+precision = 2
+show_missing = true
+skip_covered = false
+fail_under = 80.0
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if TYPE_CHECKING:",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
 ]
 
 [tool.interrogate]
@@ -139,24 +152,7 @@ color = true
 
 [tool.commitizen]
 name = "cz_conventional_commits"
-version = "0.1.0"
-version_files = [
-    "pyproject.toml:version",
-    "src/quickython/__init__.py:__version__"
-]
+version_provider = "pep621"
 tag_format = "v$version"
 update_changelog_on_bump = true
-
-[tool.coverage.report]
-precision = 2
-show_missing = true
-skip_covered = false
-fail_under = 80.0
-exclude_lines = [
-    "pragma: no cover",
-    "def __repr__",
-    "if TYPE_CHECKING:",
-    "raise AssertionError",
-    "raise NotImplementedError",
-    "if __name__ == .__main__.:",
-]
+major_version_zero = true

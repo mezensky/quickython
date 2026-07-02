@@ -1,8 +1,9 @@
-default_stages: [commit]
+default_install_hook_types: [pre-commit, pre-push]
+default_stages: [pre-commit]
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+    rev: v6.0.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
@@ -13,29 +14,35 @@ repos:
       - id: debug-statements
       - id: mixed-line-ending
 
-  - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.9.5
-    hooks:
-      # Run the linter
-      - id: ruff
-        args: [--fix]
-      # Run the formatter
-      - id: ruff-format
-
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.19.1
-    hooks:
-      - id: mypy
-        additional_dependencies: []
-        args: [--no-strict-optional, --ignore-missing-imports]
-
-  # Pre-push hooks - run full test suite before pushing
+  # ruff, mypy, and pytest run via uv so their versions always match uv.lock.
   - repo: local
     hooks:
+      - id: ruff-check
+        name: ruff (lint)
+        entry: uv run ruff check --fix
+        language: system
+        types_or: [python, pyi]
+        require_serial: true
+
+      - id: ruff-format
+        name: ruff (format)
+        entry: uv run ruff format
+        language: system
+        types_or: [python, pyi]
+        require_serial: true
+
+      - id: mypy
+        name: mypy
+        entry: uv run mypy
+        language: system
+        types: [python]
+        pass_filenames: false
+        require_serial: true
+
       - id: pytest
-        name: pytest
-        entry: poetry run pytest --cov-fail-under=80
+        name: pytest (pre-push)
+        entry: uv run pytest --cov-fail-under=80
         language: system
         pass_filenames: false
         always_run: true
-        stages: [push]
+        stages: [pre-push]

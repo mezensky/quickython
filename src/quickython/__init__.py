@@ -1,7 +1,13 @@
 """quickython - A quick start Python project template."""
 
-__version__ = "0.1.0"
+import importlib.metadata as _metadata
 
+from quickython.example import Greeting, greet
 from quickython.sample import samplefunction
 
-__all__ = ["samplefunction"]
+try:
+    __version__ = _metadata.version("quickython")
+except _metadata.PackageNotFoundError:  # pragma: no cover
+    __version__ = "0.0.0"
+
+__all__ = ["Greeting", "greet", "samplefunction"]
